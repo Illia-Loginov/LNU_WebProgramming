@@ -1,0 +1,11 @@
+{
+  "name": "lnu_webprogramming",
+  "version": "1.0.0",
+  "description": "Timetable API created as part of the Web Programming course at LNU",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Illia Loginov",
+  "license": "ISC"
+}
