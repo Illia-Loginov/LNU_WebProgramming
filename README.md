@@ -24,19 +24,19 @@ Timetable API created as part of the Web Programming course at LNU
 
 * **POST** Group (`/groups/`) - add a new group
 
-    * **GET** Group's schedule for a week (`/groups/:groupId/`) - schedule of a particular group for the whole week
+    * **GET** Group's schedule for a week (`/groups/:groupName/`) - schedule of a particular group for the whole week
 
-    * **PUT** Group (`/groups/:groupId/`) - change the details of a particular group
+    * **PUT** Group (`/groups/:groupName/`) - change the details of a particular group
 
-    * **DELETE** Group (`/groups/:groupId/`) - remove a particular group
+    * **DELETE** Group (`/groups/:groupName/`) - remove a particular group
 
-        * **GET** Group's schedule for a day (`/groups/:groupId/days/:day/`) - schedule for a particular date or day of the week
+        * **GET** Group's schedule for a day (`/groups/:groupName/days/:day/`) - schedule for a particular date
 
-            * **GET** Group's schedule for a specific lesson (`/groups/:groupId/days/:day/lessons/:lesson/`)
+            * **GET** Group's schedule for a specific lesson (`/groups/:groupName/days/:day/lessons/:lesson/`)
 
-            * **GET** Group's schedule for a specific time (`/groups/:groupId/days/:day/time/:time/`)
+            * **GET** Group's schedule for a specific time (`/groups/:groupName/days/:day/time/:time/`)
 
-        * **GET** Lessons left for a group for today (`/groups/:groupId/fromnow/`)
+        * **GET** Lessons left for a group for today (`/groups/:groupName/fromnow/`)
 
 ### Teachers
 
@@ -50,7 +50,7 @@ Timetable API created as part of the Web Programming course at LNU
 
     * **DELETE** Teacher (`/teachers/:teacherId/`) - remove a particular teacher
 
-        * **GET** Teacher's schedule for a day (`/teachers/:teacherId/days/:day/`) - schedule for a particular date or day of the week
+        * **GET** Teacher's schedule for a day (`/teachers/:teacherId/days/:day/`) - schedule for a particular date
 
             * **GET** Teacher's schedule for a specific lesson (`/teachers/:teacherId/days/:day/lessons/:lesson/`)
 

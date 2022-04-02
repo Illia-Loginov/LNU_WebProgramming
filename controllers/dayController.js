@@ -1,11 +1,28 @@
-module.exports.all_get = (req, res) => {
-    res.send('list of all days in a semester, specifying whether they are part of the week A, week B or weekends');
+const Day = require('../models/Day');
+const dayService = require('../services/dayService')(Day);
+
+module.exports.all_get = async (req, res) => {
+    const days = await dayService.getAll();
+
+    res.json(days);
 }
 
-module.exports.edit_put = (req, res) => {
-    res.send('change details about days in the semester');
+module.exports.edit_put = async (req, res) => {
+    let days = req.body;
+
+    days = days.map(day => { day.date = new Date(day.date); return day; })
+
+    await dayService.replaceAll(days);
+
+    res.sendStatus(200);
 }
 
-module.exports.one_get = (req, res) => {
-    res.send('whether a particular day is a part of the week A, week B or a weekend');
+module.exports.one_get = async (req, res) => {
+    let date = req.params.day;
+
+    date = new Date(date);
+
+    const day = await dayService.getOne(date);
+
+    res.json(day);
 }

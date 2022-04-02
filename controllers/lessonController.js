@@ -1,23 +1,53 @@
-module.exports.create_post = (req, res) => {
-    res.send('add a new lesson');
+const Lesson = require('../models/Lesson');
+const lessonService = require('../services/lessonService')(Lesson);
+
+module.exports.create_post = async (req, res) => {
+    const lesson = req.body;
+
+    await lessonService.createOne(lesson);
+
+    res.sendStatus(200);
 }
 
-module.exports.one_get = (req, res) => {
-    res.send('all the information about specific lesson by id');
+module.exports.one_get = async (req, res) => {
+    const lessonId = req.params.lessonId;
+
+    const lesson = await lessonService.getOne(lessonId);
+
+    res.json(lesson);
 }
 
-module.exports.delete_delete = (req, res) => {
-    res.send('remove a specific lesson by id');
+module.exports.delete_delete = async (req, res) => {
+    const lessonId = req.params.lessonId;
+
+    await lessonService.deleteOne(lessonId);
+
+    res.sendStatus(200);
 }
 
-module.exports.changeTeacher_patch = (req, res) => {
-    res.send('change a teacher teaching a specific lesson');
+module.exports.changeTeacher_patch = async (req, res) => {
+    const lessonId = req.params.lessonId;
+    const teacher = req.body;
+
+    await lessonService.editOne(lessonId, { teacher });
+
+    res.sendStatus(200);
 }
 
-module.exports.changeGroups_patch = (req, res) => {
-    res.send('change a list of groups attending a specific lesson');
+module.exports.changeGroups_patch = async (req, res) => {
+    const lessonId = req.params.lessonId;
+    const groups = req.body;
+
+    await lessonService.editOne(lessonId, { groups });
+
+    res.sendStatus(200);
 }
 
-module.exports.changeTime_patch = (req, res) => {
-    res.send('change a time (day and/or slot) during which a lesson is held');
+module.exports.changeTime_patch = async (req, res) => {
+    const lessonId = req.params.lessonId;
+    const { lessonSlot, day, week } = req.body;
+
+    await lessonService.editOne(lessonId, { lessonSlot, day, week });
+
+    res.sendStatus(200);
 }
