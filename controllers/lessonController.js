@@ -25,29 +25,19 @@ module.exports.delete_delete = async (req, res) => {
     res.sendStatus(200);
 }
 
-module.exports.changeTeacher_patch = async (req, res) => {
+module.exports.edit_patch = async (req, res) => {
     const lessonId = req.params.lessonId;
-    const teacher = req.body;
+    const newValues = req.body;
 
-    await lessonService.editOne(lessonId, { teacher });
+    for(let key of Object.keys(newValues)) {
+        if(!['teacher', 'groups', 'slot', 'day', 'week'].includes(key)) {
+            return res.status(400).json({ error: `No such property as ${key}`});
+        } else if(newValues[key] == null || newValues[key] == undefined) {
+            return res.status(400).json({ error: `${key} is null or undefined`});
+        }
+    }
 
-    res.sendStatus(200);
-}
-
-module.exports.changeGroups_patch = async (req, res) => {
-    const lessonId = req.params.lessonId;
-    const groups = req.body;
-
-    await lessonService.editOne(lessonId, { groups });
-
-    res.sendStatus(200);
-}
-
-module.exports.changeTime_patch = async (req, res) => {
-    const lessonId = req.params.lessonId;
-    const { lessonSlot, day, week } = req.body;
-
-    await lessonService.editOne(lessonId, { lessonSlot, day, week });
+    await lessonService.editOne(lessonId, newValues);
 
     res.sendStatus(200);
 }

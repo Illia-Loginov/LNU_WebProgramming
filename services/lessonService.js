@@ -4,7 +4,7 @@ const lessonService = (lessonModel) => {
     }
 
     const getOne = async (lessonId) => {
-        return await lessonModel.findById(lessonId);
+        return await lessonModel.findById(lessonId, '-__v').populate('teacher', 'name').exec();
     }
 
     const deleteOne = async (lessonId) => {
@@ -16,7 +16,8 @@ const lessonService = (lessonModel) => {
         const lesson = await lessonModel.findById(lessonId);
 
         for(let key of Object.keys(newValues)) {
-            lesson[key] = newValues[key];
+            if(newValues[key])
+                lesson[key] = newValues[key];
         }
 
         await lesson.save();

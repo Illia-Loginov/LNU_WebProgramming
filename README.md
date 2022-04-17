@@ -11,12 +11,8 @@ Timetable API created as part of the Web Programming course at LNU
     * **GET** Lesson (`/lessons/:lessonId/`) - all the information about specific lesson by id
 
     * **DELETE** Lesson (`/lessons/:lessonId/`) - remove a specific lesson by id
-    
-    * **PATCH** Lesson's teacher (`/lessons/:lessonId/teacher/`) - change a teacher teaching a specific lesson
 
-    * **PATCH** Lesson's groups (`/lessons/:lessonId/groups/`) - change a list of groups attending a specific lesson
-
-    * **PATCH** Lesson's time (`/lessons/:lessonId/time/`) - change a time (day and/or slot) during which a lesson is held
+    * **PATCH** Lessson (`/lessons/:lessonId/`) - edit lesson's teacher, list of groups and/or time at which it is held (week, day and lesson slot)
 
 ### Groups
 

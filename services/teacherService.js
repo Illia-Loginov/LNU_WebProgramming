@@ -22,7 +22,7 @@ const teacherService = (teacherModel, lessonModel, slotModel, dayModel) => {
         await teacher.deleteOne();
     }
 
-    const getSchedule = async (teacherId, date = undefined, lesson = undefined, time = undefined) => {
+    const getSchedule = async (teacherId, date = undefined, slot = undefined, time = undefined) => {
         let filter = {};
         filter.teacher = teacherId;
 
@@ -31,19 +31,32 @@ const teacherService = (teacherModel, lessonModel, slotModel, dayModel) => {
             filter.week = { $in: ['AB', await dayModel.findOne({ date: date }, 'type').exec()] };
         }
 
-        if(lesson) {
-            filter.slot = lesson;
+        if(slot) {
+            filter.slot = slot;
         } else if(time) {
             filter.slot = (await slotModel.findOne({ start: { $lte: time }, end: { $gte: time } }, 'number -_id').exec())?.number;
         }
 
-        let lessons = await lessonModel.find(filter, '-__v').exec();
-        return lessons;
+        let lessons = await lessonModel.find(filter, '-__v').sort('day slot').populate('teacher', 'name').exec();
+
+        if(!date) {
+            let days = {};
+            for(let lesson of lessons) {
+                if(days[lesson.day])
+                days[lesson.day].push(lesson)
+                else
+                days[lesson.day] = [lesson];
+            }
+
+            return days;
+        } else {
+            return lessons;
+        }
     }
 
     const getRemainingSchedule = async (teacherId) => {
         let filter = {};
-        filter.group = groupName;
+        filter.teacher = teacherId;
 
         let date = new Date();
         let time = date.getHours() < 10 ? `0${date.getHours()}` : `${date.getHours()}`;
