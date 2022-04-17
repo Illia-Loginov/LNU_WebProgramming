@@ -9,6 +9,11 @@ const dayService = (dayModel) => {
     }
 
     const getOne = async (date) => {
+        let day = await dayModel.findOne({ date: date }, '-_id -__v').exec();
+
+        if(!day)
+            throw new Error('Day not found in the semester')
+
         return await dayModel.findOne({ date: date }, '-_id -__v').exec();
     }
 

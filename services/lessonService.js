@@ -9,11 +9,18 @@ const lessonService = (lessonModel) => {
 
     const deleteOne = async (lessonId) => {
         const lesson = await lessonModel.findById(lessonId);
+
+        if(!lesson)
+            throw new Error('Lesson not found');
+
         await lesson.deleteOne();
     }
 
     const editOne = async (lessonId, newValues) => {
         const lesson = await lessonModel.findById(lessonId);
+
+        if(!lesson)
+            throw new Error('Lesson not found');
 
         for(let key of Object.keys(newValues)) {
             if(newValues[key])

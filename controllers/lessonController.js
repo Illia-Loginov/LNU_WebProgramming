@@ -4,25 +4,50 @@ const lessonService = require('../services/lessonService')(Lesson);
 module.exports.create_post = async (req, res) => {
     const lesson = req.body;
 
-    await lessonService.createOne(lesson);
+    try {
+        await lessonService.createOne(lesson);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: error.message });
+    }
 
-    res.sendStatus(200);
+    return res.sendStatus(200);
 }
 
 module.exports.one_get = async (req, res) => {
     const lessonId = req.params.lessonId;
 
-    const lesson = await lessonService.getOne(lessonId);
+    let lesson;
 
-    res.json(lesson);
+    try {
+        lesson = await lessonService.getOne(lessonId);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: error.message });
+    }
+
+    if(!lesson) {
+        return res.status(404).json({ error: 'Lesson not found' });
+    } else {
+        return res.json(lesson);
+    }
 }
 
 module.exports.delete_delete = async (req, res) => {
     const lessonId = req.params.lessonId;
 
-    await lessonService.deleteOne(lessonId);
+    try {
+        await lessonService.deleteOne(lessonId);
+    } catch (error) {
+        if(error.message === 'Lesson not found') {
+            return res.status(404).json({ error: error.message });
+        } else {
+            console.error(error);
+            return res.status(500).json({ error: error.message });
+        }
+    }
 
-    res.sendStatus(200);
+    return res.sendStatus(200);
 }
 
 module.exports.edit_patch = async (req, res) => {
@@ -37,7 +62,16 @@ module.exports.edit_patch = async (req, res) => {
         }
     }
 
-    await lessonService.editOne(lessonId, newValues);
+    try {
+        await lessonService.editOne(lessonId, newValues);
+    } catch (error) {
+        if(error.message === 'Lesson not found') {
+            return res.status(404).json({ error: error.message });
+        } else {
+            console.error(error);
+            return res.status(500).json({ error: error.message });
+        }
+    }
 
-    res.sendStatus(200);
+    return res.sendStatus(200);
 }

@@ -10,6 +10,9 @@ const teacherService = (teacherModel, lessonModel, slotModel, dayModel) => {
     const editOne = async (teacherId, newValues) => {
         const teacher = await teacherModel.findById(teacherId);
 
+        if(!teacher)
+            throw new Error('Teacher not found');
+
         for(let key of Object.keys(newValues)) {
             teacher[key] = newValues[key];
         }
@@ -19,6 +22,10 @@ const teacherService = (teacherModel, lessonModel, slotModel, dayModel) => {
     
     const deleteOne = async (teacherId) => {
         const teacher = await teacherModel.findById(teacherId);
+
+        if(!teacher)
+            throw new Error('Teacher not found');
+
         await teacher.deleteOne();
     }
 

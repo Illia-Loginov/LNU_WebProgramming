@@ -9,7 +9,12 @@ const slotService = (slotModel) => {
     }
 
     const getOne = async (number) => {
-        return await slotModel.findOne({ number: number }, '-_id -__v').exec();
+        let slot = await slotModel.findOne({ number: number }, '-_id -__v').exec();
+
+        if(!slot)
+            throw new Error('Slot not found')
+
+        return slot;
     }
 
     return {

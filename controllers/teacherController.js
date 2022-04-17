@@ -5,42 +5,79 @@ const Day = require('../models/Day');
 const teacherService = require('../services/teacherService')(Teacher, Lesson, Slot, Day);
 
 module.exports.all_get = async (req, res) => {
-    const teachers = await teacherService.getAll();
+    let teachers;
 
-    res.json(teachers);
+    try {
+        teachers = await teacherService.getAll();
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: error.message });
+    }
+
+    return res.json(teachers);
 }
 
 module.exports.create_post = async (req, res) => {
     const teacher = req.body;
 
-    await teacherService.createOne(teacher);
+    try {
+        await teacherService.createOne(teacher);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: error.message });
+    }
 
-    res.sendStatus(200);
+    return res.sendStatus(200);
 }
 
 module.exports.weekSchedule_get = async (req, res) => {
     const teacherId = req.params.teacherId;
 
-    const schedule = await teacherService.getSchedule(teacherId);
+    let schedule;
 
-    res.json(schedule);
+    try {
+        schedule = await teacherService.getSchedule(teacherId);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: error.message });
+    }
+
+    return res.json(schedule);
 }
 
 module.exports.edit_put = async (req, res) => {
     const teacherId = req.params.teacherId;
     const teacher = req.body;
 
-    await teacherService.editOne(teacherId, teacher);
+    try {
+        await teacherService.editOne(teacherId, teacher);
+    } catch (error) {
+        if(error.message === 'Teacher not found') {
+            return res.status(404).json({ error: error.message });
+        } else {
+            console.error(error);
+            return res.status(500).json({ error: error.message });
+        }
+    }
 
-    res.sendStatus(200);
+    return res.sendStatus(200);
 }
 
 module.exports.delete_delete = async (req, res) => {
     const teacherId = req.params.teacherId;
 
-    await teacherService.deleteOne(teacherId);
+    try {
+        await teacherService.deleteOne(teacherId);
+    } catch (error) {
+        if(error.message === 'Teacher not found') {
+            return res.status(404).json({ error: error.message });
+        } else {
+            console.error(error);
+            return res.status(500).json({ error: error.message });
+        }
+    }
 
-    res.sendStatus(200);
+    return res.sendStatus(200);
 }
 
 module.exports.daySchedule_get = async (req, res) => {
@@ -48,9 +85,16 @@ module.exports.daySchedule_get = async (req, res) => {
 
     day = new Date(day);
 
-    const schedule = await teacherService.getSchedule(teacherId, day);
+    let schedule;
+    
+    try {
+        schedule = await teacherService.getSchedule(teacherId, day);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: error.message });
+    }
 
-    res.json(schedule);
+    return res.json(schedule);
 }
 
 module.exports.lessonSchedule_get = async (req, res) => {
@@ -59,9 +103,16 @@ module.exports.lessonSchedule_get = async (req, res) => {
     day = new Date(day);
     lesson = Number(lesson);
 
-    const schedule = await teacherService.getSchedule(teacherId, day, lesson);
+    let schedule;
 
-    res.json(schedule);
+    try {
+        schedule = await teacherService.getSchedule(teacherId, day, lesson);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: error.message });
+    }
+
+    return res.json(schedule);
 }
 
 module.exports.timeSchedule_get = async (req, res) => {
@@ -69,15 +120,29 @@ module.exports.timeSchedule_get = async (req, res) => {
 
     day = new Date(day);
 
-    const schedule = await teacherService.getSchedule(teacherId, day, undefined, time);
+    let schedule;
 
-    res.json(schedule);
+    try {
+        schedule = await teacherService.getSchedule(teacherId, day, undefined, time);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: error.message });
+    }
+
+    return res.json(schedule);
 }
 
 module.exports.remainingSchedule_get = async (req, res) => {
     const teacherId = req.params.teacherId;
 
-    const schedule = await teacherService.getRemainingSchedule(teacherId);
+    let schedule;
 
-    res.json(schedule);
+    try {
+        schedule = await teacherService.getRemainingSchedule(teacherId);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: error.message });
+    }
+
+    return res.json(schedule);
 }

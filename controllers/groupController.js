@@ -5,42 +5,79 @@ const Day = require('../models/Day');
 const groupService = require('../services/groupService')(Group, Lesson, Slot, Day);
 
 module.exports.all_get = async (req, res) => {
-    const groups = await groupService.getAll();
+    let groups;
 
-    res.json(groups);
+    try {
+        groups = await groupService.getAll();
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: error.message });
+    }
+
+    return res.json(groups);
 }
 
 module.exports.create_post = async (req, res) => {
     const group = req.body;
 
-    await groupService.createOne(group);
+    try {
+        await groupService.createOne(group);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: error.message });
+    }
 
-    res.sendStatus(200);
+    return res.sendStatus(200);
 }
 
 module.exports.weekSchedule_get = async (req, res) => {
     const groupName = req.params.groupName;
 
-    const schedule = await groupService.getSchedule(groupName);
+    let schedule;
 
-    res.json(schedule);
+    try {
+        schedule = await groupService.getSchedule(groupName);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: error.message });
+    }
+
+    return res.json(schedule);
 }
 
 module.exports.edit_put = async (req, res) => {
     const groupName = req.params.groupName;
     const group = req.body;
 
-    await groupService.editOne(groupName, group);
+    try {
+        await groupService.editOne(groupName, group);
+    } catch (error) {
+        if(error.message === 'Group not found') {
+            return res.status(404).json({ error: error.message });
+        } else {
+            console.error(error);
+            return res.status(500).json({ error: error.message });
+        }
+    }
 
-    res.sendStatus(200);
+    return res.sendStatus(200);
 }
 
 module.exports.delete_delete = async (req, res) => {
     const groupName = req.params.groupName;
 
-    await groupService.deleteOne(groupName);
+    try {
+        await groupService.deleteOne(groupName);
+    } catch (error) {
+        if(error.message === 'Group not found') {
+            return res.status(404).json({ error: error.message });
+        } else {
+            console.error(error);
+            return res.status(500).json({ error: error.message });
+        }
+    }
 
-    res.sendStatus(200);
+    return res.sendStatus(200);
 }
 
 module.exports.daySchedule_get = async (req, res) => {
@@ -48,9 +85,16 @@ module.exports.daySchedule_get = async (req, res) => {
 
     day = new Date(day);
 
-    const schedule = await groupService.getSchedule(groupName, day);
+    let schedule;
+    
+    try {
+        schedule = await groupService.getSchedule(groupName, day);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: error.message });
+    }
 
-    res.json(schedule);
+    return res.json(schedule);
 }
 
 module.exports.lessonSchedule_get = async (req, res) => {
@@ -59,9 +103,16 @@ module.exports.lessonSchedule_get = async (req, res) => {
     day = new Date(day);
     lesson = Number(lesson);
 
-    const schedule = await groupService.getSchedule(groupName, day, lesson);
+    let schedule;
 
-    res.json(schedule);
+    try {
+        schedule = await groupService.getSchedule(groupName, day, lesson);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: error.message });
+    }
+
+    return res.json(schedule);
 }
 
 module.exports.timeSchedule_get = async (req, res) => {
@@ -69,15 +120,29 @@ module.exports.timeSchedule_get = async (req, res) => {
 
     day = new Date(day);
 
-    const schedule = await groupService.getSchedule(groupName, day, undefined, time);
+    let schedule;
 
-    res.json(schedule);
+    try {
+        schedule = await groupService.getSchedule(groupName, day, undefined, time);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: error.message });
+    }
+
+    return res.json(schedule);
 }
 
 module.exports.remainingSchedule_get = async (req, res) => {
     const groupName = req.params.groupName;
 
-    const schedule = await groupService.getRemainingSchedule(groupName);
+    let schedule;
 
-    res.json(schedule);
+    try {
+        schedule = await groupService.getRemainingSchedule(groupName);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: error.message });
+    }
+
+    return res.json(schedule);
 }
