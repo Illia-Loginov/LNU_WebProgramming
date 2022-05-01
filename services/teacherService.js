@@ -35,7 +35,7 @@ const teacherService = (teacherModel, lessonModel, slotModel, dayModel) => {
 
         if(date) {
             filter.day = date.getDay();
-            filter.week = { $in: ['AB', await dayModel.findOne({ date: date }, 'type').exec()] };
+            filter.week = { $in: ['AB', (await dayModel.findOne({ date: date }, 'type').exec())?.type] };
         }
 
         if(slot) {
@@ -70,13 +70,14 @@ const teacherService = (teacherModel, lessonModel, slotModel, dayModel) => {
         time += ':';
         time += date.getMinutes() < 10 ? `0${date.getMinutes()}` : `${date.getMinutes()}`; 
 
+        filter.day = date.getDay();
         date.setUTCHours(0);
         date.setUTCMinutes(0);
+        if(date.getDay() !== filter.day)
+            date.setDate(date.getDate() + 1);
+        filter.week = { $in: ['AB', (await dayModel.findOne({ date: date }, 'type').exec())?.type] };
 
-        filter.day = date.getDay();
-        filter.week = { $in: ['AB', await dayModel.findOne({ date: date }, 'type').exec()] };
-
-        filter.slot = { $in: await slotModel.find({ end: { $gte: time } }, 'number').exec() }
+        filter.slot = { $in: (await slotModel.find({ end: { $gte: time } }, 'number').exec()).map(slot => slot.number) }
 
         let lessons = await lessonModel.find(filter, '-__v').exec();
         return lessons;

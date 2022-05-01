@@ -4,7 +4,9 @@
   "description": "Timetable API created as part of the Web Programming course at LNU",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app",
+    "dev": "nodemon app",
+    "test": "jest --watchAll"
   },
   "author": "Illia Loginov",
   "license": "ISC",
@@ -12,5 +14,8 @@
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "mongoose": "^6.2.9"
+  },
+  "devDependencies": {
+    "jest": "^27.5.1"
   }
 }

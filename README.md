@@ -12,7 +12,7 @@ Timetable API created as part of the Web Programming course at LNU
 
     * **DELETE** Lesson (`/lessons/:lessonId/`) - remove a specific lesson by id
 
-    * **PATCH** Lessson (`/lessons/:lessonId/`) - edit lesson's teacher, list of groups and/or time at which it is held (week, day and lesson slot)
+    * **PATCH** Lesson (`/lessons/:lessonId/`) - edit lesson's teacher, list of groups and/or time at which it is held (week, day and lesson slot)
 
 ### Groups
 
