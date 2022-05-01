@@ -3,6 +3,7 @@ const Lesson = require('../models/Lesson');
 const Slot = require('../models/Slot');
 const Day = require('../models/Day');
 const teacherService = require('../services/teacherService')(Teacher, Lesson, Slot, Day);
+const logger = require('../logger/logger');
 
 module.exports.all_get = async (req, res) => {
     let teachers;
@@ -10,7 +11,7 @@ module.exports.all_get = async (req, res) => {
     try {
         teachers = await teacherService.getAll();
     } catch (error) {
-        console.error(error);
+        logger.error(error);
         return res.status(500).json({ error: error.message });
     }
 
@@ -22,8 +23,9 @@ module.exports.create_post = async (req, res) => {
 
     try {
         await teacherService.createOne(teacher);
+        logger.info('POST /teachers/ - Successful');
     } catch (error) {
-        console.error(error);
+        logger.error(error);
         return res.status(500).json({ error: error.message });
     }
 
@@ -38,7 +40,7 @@ module.exports.weekSchedule_get = async (req, res) => {
     try {
         schedule = await teacherService.getSchedule(teacherId);
     } catch (error) {
-        console.error(error);
+        logger.error(error);
         return res.status(500).json({ error: error.message });
     }
 
@@ -51,11 +53,13 @@ module.exports.edit_put = async (req, res) => {
 
     try {
         await teacherService.editOne(teacherId, teacher);
+        logger.info('PUT /teachers/:teacherId - Successful');
     } catch (error) {
         if(error.message === 'Teacher not found') {
+            logger.info('PUT /teachers/:teacherId - Unsuccessful (teacher not found)');
             return res.status(404).json({ error: error.message });
         } else {
-            console.error(error);
+            logger.error(error);
             return res.status(500).json({ error: error.message });
         }
     }
@@ -68,11 +72,13 @@ module.exports.delete_delete = async (req, res) => {
 
     try {
         await teacherService.deleteOne(teacherId);
+        logger.info('DELETE /teachers/:teacherId - Successful');
     } catch (error) {
         if(error.message === 'Teacher not found') {
+            logger.info('DELETE /teachers/:teacherId - Unsuccessful (teacher not found)');
             return res.status(404).json({ error: error.message });
         } else {
-            console.error(error);
+            logger.error(error);
             return res.status(500).json({ error: error.message });
         }
     }
@@ -90,7 +96,7 @@ module.exports.daySchedule_get = async (req, res) => {
     try {
         schedule = await teacherService.getSchedule(teacherId, day);
     } catch (error) {
-        console.error(error);
+        logger.error(error);
         return res.status(500).json({ error: error.message });
     }
 
@@ -108,7 +114,7 @@ module.exports.lessonSchedule_get = async (req, res) => {
     try {
         schedule = await teacherService.getSchedule(teacherId, day, lesson);
     } catch (error) {
-        console.error(error);
+        logger.error(error);
         return res.status(500).json({ error: error.message });
     }
 
@@ -125,7 +131,7 @@ module.exports.timeSchedule_get = async (req, res) => {
     try {
         schedule = await teacherService.getSchedule(teacherId, day, undefined, time);
     } catch (error) {
-        console.error(error);
+        logger.error(error);
         return res.status(500).json({ error: error.message });
     }
 
@@ -140,7 +146,7 @@ module.exports.remainingSchedule_get = async (req, res) => {
     try {
         schedule = await teacherService.getRemainingSchedule(teacherId);
     } catch (error) {
-        console.error(error);
+        logger.error(error);
         return res.status(500).json({ error: error.message });
     }
 

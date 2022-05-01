@@ -1,13 +1,15 @@
 const Lesson = require('../models/Lesson');
 const lessonService = require('../services/lessonService')(Lesson);
+const logger = require('../logger/logger');
 
 module.exports.create_post = async (req, res) => {
     const lesson = req.body;
 
     try {
         await lessonService.createOne(lesson);
+        logger.info('POST /lessons/ - Successful');
     } catch (error) {
-        console.error(error);
+        logger.error(error);
         return res.status(500).json({ error: error.message });
     }
 
@@ -22,7 +24,7 @@ module.exports.one_get = async (req, res) => {
     try {
         lesson = await lessonService.getOne(lessonId);
     } catch (error) {
-        console.error(error);
+        logger.error(error);
         return res.status(500).json({ error: error.message });
     }
 
@@ -38,11 +40,13 @@ module.exports.delete_delete = async (req, res) => {
 
     try {
         await lessonService.deleteOne(lessonId);
+        logger.info('DELETE /lessons/:lessonId - Successful');
     } catch (error) {
         if(error.message === 'Lesson not found') {
+            logger.info('DELETE /lessons/:lessonId - Unsuccessful (lesson not found)');
             return res.status(404).json({ error: error.message });
         } else {
-            console.error(error);
+            logger.error(error);
             return res.status(500).json({ error: error.message });
         }
     }
@@ -64,11 +68,13 @@ module.exports.edit_patch = async (req, res) => {
 
     try {
         await lessonService.editOne(lessonId, newValues);
+        logger.info('PATCH /lessons/:lessonId - Successful');
     } catch (error) {
         if(error.message === 'Lesson not found') {
+            logger.info('PATCH /lessons/:lessonId - Unsuccessful (lesson not found)');
             return res.status(404).json({ error: error.message });
         } else {
-            console.error(error);
+            logger.error(error);
             return res.status(500).json({ error: error.message });
         }
     }

@@ -1,5 +1,6 @@
 const Slot = require('../models/Slot');
 const slotService = require('../services/slotService')(Slot);
+const logger = require('../logger/logger');
 
 module.exports.all_get = async (req, res) => {
     let slots;
@@ -7,7 +8,7 @@ module.exports.all_get = async (req, res) => {
     try {
         slots = await slotService.getAll();
     } catch (error) {
-        console.error(error);
+        logger.error(error);
         return res.status(500).json({ error: error.message });
     }
 
@@ -19,8 +20,9 @@ module.exports.edit_put = async (req, res) => {
 
     try {
         await slotService.replaceAll(slots);
+        logger.info('PUT /slots/ - Successful');
     } catch (error) {
-        console.error(error);
+        logger.error(error);
         return res.status(500).json({ error: error.message });
     }
 
@@ -40,7 +42,7 @@ module.exports.one_get = async (req, res) => {
         if(error.message === 'Slot not found') {
             return res.status(404).json({ error: error.message });
         } else {
-            console.error(error);
+            logger.error(error);
             return res.status(500).json({ error: error.message });
         }
     }
