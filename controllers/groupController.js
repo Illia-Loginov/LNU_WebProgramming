@@ -47,25 +47,25 @@ module.exports.weekSchedule_get = async (req, res) => {
     return res.json(schedule);
 }
 
-module.exports.edit_put = async (req, res) => {
-    const groupName = req.params.groupName;
-    const group = req.body;
+// module.exports.edit_put = async (req, res) => {
+//     const groupName = req.params.groupName;
+//     const group = req.body;
 
-    try {
-        await groupService.editOne(groupName, group);
-        logger.info('PUT /groups/:groupName - Successful');
-    } catch (error) {
-        if(error.message === 'Group not found') {
-            logger.info('PUT /groups/:groupName - Unsuccessful (group not found)');
-            return res.status(404).json({ error: error.message });
-        } else {
-            logger.error(error);
-            return res.status(500).json({ error: error.message });
-        }
-    }
+//     try {
+//         await groupService.editOne(groupName, group);
+//         logger.info('PUT /groups/:groupName - Successful');
+//     } catch (error) {
+//         if(error.message === 'Group not found') {
+//             logger.info('PUT /groups/:groupName - Unsuccessful (group not found)');
+//             return res.status(404).json({ error: error.message });
+//         } else {
+//             logger.error(error);
+//             return res.status(500).json({ error: error.message });
+//         }
+//     }
 
-    return res.sendStatus(200);
-}
+//     return res.sendStatus(200);
+// }
 
 module.exports.delete_delete = async (req, res) => {
     const groupName = req.params.groupName;

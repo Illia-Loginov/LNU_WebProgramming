@@ -1,6 +1,6 @@
 const GroupService = require('../groupService');
 
-let teachers;
+let groups;
 let lessons;
 let dayModel;
 let slotModel;
@@ -274,29 +274,6 @@ test('createOne', async () => {
     await groupService.createOne(group);
 
     expect(groups).toContainEqual(expect.objectContaining(group));
-})
-
-test('editOne', async () => {
-    groupModel = {
-        findOne: ({ name }) => {
-            return {
-                exec: async() => {
-                    return groups.filter(group => group.name === name)[0];
-                }
-            }
-        }
-    }
-
-    const groupService = GroupService(groupModel, {}, {}, {});
-
-    const name = 'C';
-    const newValues = {
-        name: 'new'
-    }
-
-    await groupService.editOne(name, newValues);
-
-    expect(groups).toContainEqual(expect.objectContaining({ ...newValues }))
 })
 
 test('deleteOne', async () => {

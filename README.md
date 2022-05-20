@@ -22,8 +22,6 @@ Timetable API created as part of the Web Programming course at LNU
 
     * **GET** Group's schedule for a week (`/groups/:groupName/`) - schedule of a particular group for the whole week
 
-    * **PUT** Group (`/groups/:groupName/`) - change the details of a particular group
-
     * **DELETE** Group (`/groups/:groupName/`) - remove a particular group
 
         * **GET** Group's schedule for a day (`/groups/:groupName/days/:day/`) - schedule for a particular date
@@ -69,3 +67,15 @@ Timetable API created as part of the Web Programming course at LNU
 * **PUT** Days (`/days/`) - change details about days in the semester
 
     * **GET** Particular day (`/days/:day/`) - whether a particular day is a part of the week A, week B or a weekend
+
+### Admins
+
+* **GET** Admins (`/admins/`) - list of all admins (emails and ids)
+
+* **POST** Sign up (`/admins/`) - create a new admin
+
+* **POST** Log in (`/admins/login/`) - log in
+
+* **DELETE** Log out (`/admins/logout/`) - log out
+
+* **DELETE** Delete (`/admins/:adminId/`) - delete an admin

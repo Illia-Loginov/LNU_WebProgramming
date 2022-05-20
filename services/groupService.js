@@ -7,19 +7,6 @@ const groupService = (groupModel, lessonModel, slotModel, dayModel) => {
         await groupModel.create(group);
     }
 
-    const editOne = async (groupName, newValues) => {
-        const group = await groupModel.findOne({ name: groupName }).exec();
-
-        if(!group)
-            throw new Error('Group not found');
-
-        for(let key of Object.keys(newValues)) {
-            group[key] = newValues[key];
-        }
-
-        await group.save();
-    }
-    
     const deleteOne = async (groupName) => {
         const group = await groupModel.findOne({ name: groupName }).exec();
 
@@ -86,7 +73,6 @@ const groupService = (groupModel, lessonModel, slotModel, dayModel) => {
     return {
         getAll,
         createOne,
-        editOne,
         deleteOne,
         getSchedule,
         getRemainingSchedule
